@@ -1,0 +1,52 @@
+<div class="container">
+    <h1> List of all Cart items</h1>
+    <div class="row" style="display: flex; justify-content: space-around; flex-wrap: wrap;">
+        {% for i in key %}
+        <div class="col-4 ">
+            <div class="card" style="width: 20rem; height: 20rem;">
+                <form action="" method="post">
+                    {% csrf_token%}
+                    <img src="{{i.item_image.url}}" class="card-img-top" style="width: 20rem; height: 10rem;" alt="">
+                    <p class="card-title">Name:{{i.iten_name}}</p>
+                    <p class="card-text">Desc:{{i.item_desc}}</p>
+                    <p class="card-text">Price:{{i.item_price}}</p>
+                    <p class="card-text">Quantity:{{i.item_quantity}}</p>
+                    <button class="btn btn-primary">Buy Now</button>
+                    <a href="{% url 'deletecart' pk=i.id  %}">Delete</a>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+        <div class="card" style="width: 20rem; height: 20rem;">
+            <form action="{% url 'payment' %}" method="post">
+                {% csrf_token%}
+                <h1>Total Amount :</h1>
+                <p class="card-text">{{amount}}</p>
+                <input type="number" name="amount" value="{{amount}}" hidden>
+                <button class="btn btn-primary"> Pay </button>
+            </form>
+            {% if payment %}
+                <form action="{% url 'payment-status' %}" method="post">
+                    {% csrf_token %}
+                    <script
+                            src="https://checkout.razorpay.com/v1/checkout.js"
+                            data-key="rzp_test_pr99iascS1WRtU"
+                            data-amount="{{ payment.amount }}"
+                            data-currency="{{ payment.currency }}"
+                            data-order_id="{{ payment.id }}"
+                            data-buttontext="Pay with Razorpay"
+                            data-name="Sumit Ecom"
+                            data-description="Thanku for visiting My Site"
+                            data-image="https://example.com/your_logo.jpg"
+                            data-prefill.name="Sumit Umariya"
+                            data-prefill.email="Sumitumariya11@gmail.com"
+                            data-theme.color="#F37254"
+                    ></script>
+                    <input type="hidden" custom="Hidden Element" name="hidden">
+                </form>
+                {% endif %}
+        
+        </div>
+    </div>
+</div>
+</div>
